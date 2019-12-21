@@ -1,0 +1,23 @@
+{
+    "name": "knowgod/weather-stats",
+    "description": "Collect and process weather history",
+    "type": "library",
+    "license": "MIT",
+    "version": "0.1.0",
+    "minimum-stability": "beta",
+    "authors": [
+        {
+            "name": "Arkadij Kuzhel",
+            "email": "arkuzhel@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Knowgod\\WeatherStats\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0.0",
+        "guzzlehttp/guzzle": "^6.5"
+    }
+}
