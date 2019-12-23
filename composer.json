@@ -13,11 +13,15 @@
     ],
     "autoload": {
         "psr-4": {
-            "Knowgod\\WeatherStats\\": "src/"
+            "Knowgod\\WeatherStats\\": "src/",
+            "Test\\": "tests/"
         }
     },
     "require": {
         "php": ">=7.0.0",
         "guzzlehttp/guzzle": "^6.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
     }
 }
