@@ -33,6 +33,38 @@ class Main
     private $outputHeaders;
 
     /**
+     * @var string
+     */
+    private $apiKey;
+
+    /**
+     * @var string
+     */
+    private $lat;
+
+    /**
+     * @var string
+     */
+    private $long;
+
+    /**
+     * @var \Knowgod\WeatherStats\StatsProvider\Meteostat
+     */
+    private $statsProvider;
+
+    /**
+     * @param string $apiKey
+     * @param string $lat
+     * @param string $long
+     */
+    public function __construct(string $apiKey, string $lat, string $long)
+    {
+        $this->apiKey = $apiKey;
+        $this->lat    = $lat;
+        $this->long   = $long;
+    }
+
+    /**
      * @param $inputFile
      * @param $outputFile
      *
@@ -86,9 +118,6 @@ class Main
     }
 
     /**
-     * API documentation at:
-     * {@link https://api.meteostat.net/}
-     *
      * @param string $oldDate
      * @param string $newDate
      *
@@ -96,23 +125,9 @@ class Main
      */
     private function readStats(string $oldDate, string $newDate): stdClass
     {
-        $apiKey    = 'YOUR API KEY HERE';
-        $url       = 'https://api.meteostat.net';
-        $path      = '/v1/history/daily';
-        $stationId = '33345';
-        $query     = [
-            'station' => $stationId,
-            'start'   => $oldDate,
-            'end'     => $newDate,
-            'key'     => $apiKey,
-        ];
+        $statsProvider = $this->getStatsProvider();
 
-        $client   = new \GuzzleHttp\Client();
-        $response = $client->request('GET', $url . '/' . $path, ['query' => $query]);
-
-        $body = $response->getBody();
-
-        return json_decode($body->getContents(), false);
+        return $statsProvider->getPeriodStatsDaily($oldDate, $newDate);
     }
 
     /**
@@ -173,5 +188,21 @@ class Main
     {
         fclose($this->fpInput);
         fclose($this->fpOutput);
+    }
+
+    /**
+     * @return StatsProvider\Meteostat
+     */
+    private function getStatsProvider(): StatsProvider\Meteostat
+    {
+        if (!$this->statsProvider) {
+            $this->statsProvider = new \Knowgod\WeatherStats\StatsProvider\Meteostat(
+                $this->apiKey,
+                $this->lat,
+                $this->long
+            );
+        }
+
+        return $this->statsProvider;
     }
 }
